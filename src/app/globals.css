@@ -31,3 +31,21 @@ body {
     text-wrap: balance;
   }
 }
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type="checkbox"]:checked:after {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 10px;
+  margin-left: 7px;
+  margin-bottom: 4px;
+  border: solid #fff;
+  border-width: 0 2px 3px 0;
+  transform: rotate(45deg);
+}
