@@ -1,6 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { interestData } from '@/data/interest'; // Import interestData
+import { User } from '@/data/types';
+import { useRouter } from 'next/navigation';
 
 interface Interest {
   id: number;
@@ -11,16 +13,33 @@ const SavedInterests = () => {
   const [selectedInterests, setSelectedInterests] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage: number = 6;
+  const [currUser, setCurrUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    // Simulate data fetching (replace with your actual API call)
-    // You can remove this useEffect hook if data is static
-    // const fetchData = async () => {
-    //   // ... your API call logic
-    //   setSelectedInterests([fetchedData[0].id]); // Set initial selected interests
-    // };
-    // fetchData();
+    const fetchCurrUser = async () => {
+      try {
+        const response = await fetch('/api/getCurrUser');
+        if (response.ok) {
+          const data = await response.json();
+        //   console.log(data); // Fetching curr user data from mock data
+          setCurrUser(data);
+        } else {
+          console.error('Failed to fetch last user:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching last user:', error);
+      }
+    };
+
+      fetchCurrUser();
   }, []);
+
+  useEffect(() => {
+    if (!currUser) {
+      router.push('/login');
+    }
+  }, [currUser, router]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSelectedInterests = [...selectedInterests];

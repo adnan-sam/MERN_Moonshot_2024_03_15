@@ -31,7 +31,7 @@ const Navbar = () => {
 
   return (
     <div className='flex flex-col bg-white text-black'>
-        {currUser &&
+        {currUser && currUser.name &&
         // This div will be displayed only if there is a used already logged in, as I'm using mock data so there will be a user already present
           <div className="flex space-x-4 text-xs justify-end px-3 mt-2">
             <Link href="/">
@@ -40,7 +40,7 @@ const Navbar = () => {
             <Link href="/">
               <p>Orders & Returns</p>
             </Link>
-            {currUser ? <span>{`Hi, ${currUser.name.split(' ')[0]}`}</span> : <span>Loading...</span>}
+            {currUser && currUser.name ? <span>{`Hi, ${currUser.name.split(' ')[0]}`}</span> : <span>Loading...</span>}
           </div>
         }
       <nav className="flex max-w-full items-center justify-between pt-2 p-4 space-x-4">
