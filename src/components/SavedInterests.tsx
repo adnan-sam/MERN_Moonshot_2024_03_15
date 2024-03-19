@@ -1,8 +1,9 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { interestData } from '@/data/interest'; // Import interestData
+// import { interestData } from '@/data/interest'; // Import interestData
 import { User } from '@/data/types';
 import { useRouter } from 'next/navigation';
+import { faker } from '@faker-js/faker';
 
 interface Interest {
   id: number;
@@ -13,7 +14,7 @@ const SavedInterests = () => {
   const [selectedInterests, setSelectedInterests] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage: number = 6;
-  const [currUser, setCurrUser] = useState<User | null>(null);
+  const [interestData, setInterestData] = useState<Interest[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -22,8 +23,17 @@ const SavedInterests = () => {
         const response = await fetch('/api/getCurrUser');
         if (response.ok) {
           const data = await response.json();
-        //   console.log(data); // Fetching curr user data from mock data
-          setCurrUser(data);
+          // console.log(data.id); // Fetching curr user data from mock data
+          if(data) {
+            const fakerData: Interest[] = Array.from({ length: 100 }, (_, index) => ({
+              id: index + 1,
+              name: faker.commerce.product(),
+            }));
+            setInterestData(fakerData);
+          }
+          else if(!data) {
+            router.push('/login');
+          }
         } else {
           console.error('Failed to fetch last user:', response.statusText);
         }
@@ -34,12 +44,6 @@ const SavedInterests = () => {
 
       fetchCurrUser();
   }, []);
-
-  useEffect(() => {
-    if (!currUser) {
-      router.push('/login');
-    }
-  }, [currUser, router]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSelectedInterests = [...selectedInterests];
@@ -57,10 +61,7 @@ const SavedInterests = () => {
 
   const totalPages: number = Math.ceil(interestData.length / itemsPerPage);
 
-  const pageNumbers: number[] = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
+  const pageNumbers: number[] = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   const indexOfLastItem: number = currentPage * itemsPerPage;
   const indexOfFirstItem: number = indexOfLastItem - itemsPerPage;
