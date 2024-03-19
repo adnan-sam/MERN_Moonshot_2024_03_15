@@ -14,8 +14,8 @@ const Verification = () => {
             const response = await fetch('/api/getCurrUser');
             if (response.ok) {
               const data = await response.json();
-            //   console.log(data); // Fetching curr user data from mock data
-            const modifiedEmail = data.email.replace(/^(.{3}).*@/, (match: string, group1: string) => `${group1}***@`);
+              console.log(data); // Fetching curr user data from mock data
+              const modifiedEmail = data.email.replace(/^(.{3}).*@/, (match: string, group1: string) => `${group1}***@`);
               setEmail(modifiedEmail);
 
             } else {

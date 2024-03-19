@@ -23,16 +23,16 @@ const SavedInterests = () => {
         const response = await fetch('/api/getCurrUser');
         if (response.ok) {
           const data = await response.json();
-          // console.log(data.id); // Fetching curr user data from mock data
+          console.log(data.id); // Fetching curr user data from mock data
+          if(!data.id) {
+            router.push('/login');
+          }
           if(data) {
             const fakerData: Interest[] = Array.from({ length: 100 }, (_, index) => ({
               id: index + 1,
               name: faker.commerce.product(),
             }));
             setInterestData(fakerData);
-          }
-          else if(!data) {
-            router.push('/login');
           }
         } else {
           console.error('Failed to fetch last user:', response.statusText);
